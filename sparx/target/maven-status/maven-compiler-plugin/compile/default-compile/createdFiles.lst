@@ -1,0 +1,12 @@
+sparx\dao\BlogDAO.class
+sparx\service\UserService.class
+sparx\controller\HomeController.class
+sparx\model\Message.class
+sparx\model\OutputMessage.class
+sparx\model\Blog.class
+sparx\controller\LoginController.class
+sparx\service\EmailService.class
+sparx\controller\UserRegistrationController.class
+sparx\model\User.class
+sparx\dao\UserDAO.class
+sparx\service\BlogService.class
