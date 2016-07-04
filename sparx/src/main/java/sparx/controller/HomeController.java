@@ -27,10 +27,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 
 import sparx.model.Blog;
+import sparx.model.Forum;
 import sparx.model.Message;
 import sparx.model.OutputMessage;
 import sparx.model.User;
 import sparx.service.BlogService;
+import sparx.service.ForumService;
 import sparx.service.UserService;
 
 @Controller
@@ -41,6 +43,9 @@ public class HomeController {
     
     @Autowired
     private BlogService blogService;
+    
+    @Autowired
+    private ForumService forumService;
 	
 	@RequestMapping("/")
 	public ModelAndView index() {
@@ -102,5 +107,30 @@ public class HomeController {
 	  public OutputMessage sendMessage(Message message, Principal principal) {
 	    return new OutputMessage(message, new Date(),principal.getName());
 	  }
+	
+	
+	@RequestMapping("/Forum")
+	public ModelAndView newForum(Model m) {
+		m.addAttribute("forum", new Forum());
+		List<Forum> forums = forumService.listForums();
+		String json = new Gson().toJson(forums);
+		ModelAndView model = new ModelAndView("NewForum");
+		model.addObject("forums", json);
+		return model;
+	}
+	
+	@RequestMapping(value = "/Forum/add",method=RequestMethod.POST)
+	public String addForum(Model model,@Valid @ModelAttribute("forum") Forum f, BindingResult result, Principal principal) {
+
+		if(result.hasErrors())
+			return "NewForum";
+		
+		f.setUser(principal.getName());
+		f.setDate(new Date());
+		forumService.addForum(f);
+					
+		return "redirect:/Forum";
+	
+	}
 	
 }
